@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gaming Club</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <style>
+    body { background-color: #0a1a4f; }
+    h1 { color: white; text-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff; }
+    .form-control { background-color: #020a2b; color: white; border-color: #00e5ff; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="page-header text-center">
+      <h1>Gaming Club</h1>
+    </div>
+
+    <div class="row" id="registration-page">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-primary">
+          <div class="panel-heading text-center">
+            <h3 class="panel-title">Register</h3>
+          </div>
+          <div class="panel-body">
+
+            <form id="registration-form" class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-5 col-sm-offset-1 control-label" for="firstName">First Name:</label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control" id="firstName">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 col-sm-offset-1 control-label" for="lastName">Last Name:</label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control" id="lastName">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 col-sm-offset-1 control-label" for="email">Email:</label>
+                <div class="col-sm-5">
+                  <input type="email" class="form-control" id="email">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 col-sm-offset-1 control-label" for="password">Password:</label>
+                <div class="col-sm-5">
+                  <input type="password" class="form-control" id="password">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 col-sm-offset-1 control-label" for="dob">Date of Birth:</label>
+                <div class="col-sm-5">
+                  <input type="date" class="form-control" id="dob">
+                </div>
+              </div>
+
+              <p class="text-center text-muted">Password must contain a ! or ?</p>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Register</button>
+              </div>
+            </form>
+
+            <div id="message" style="margin-top: 15px;"></div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="thanks-page" style="display:none;">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-success">
+          <div class="panel-heading text-center">
+            <h3 class="panel-title" id="thanks-message"></h3>
+          </div>
+          <div class="panel-body text-center">
+            <p class="lead">Registration successful! Here is your information:</p>
+            <p id="info"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var form = document.getElementById("registration-form");
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      var user = {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+        dob: document.getElementById("dob").value
+      };
+
+      var message = document.getElementById("message");
+      var allFilled = user.firstName && user.lastName && user.email && user.password && user.dob;
+      var hasSpecial = user.password.indexOf("!") !== -1 || user.password.indexOf("?") !== -1;
+
+      if (!allFilled) {
+        message.innerHTML = '<div class="alert alert-danger text-center">Registration failed: all fields are required.</div>';
+        return;
+      }
+      var specialInName = /[^A-Za-z0-9\s]/.test(user.firstName) || /[^A-Za-z0-9\s]/.test(user.lastName);
+
+      if (specialInName) {
+        message.innerHTML = '<div class="alert alert-danger text-center">There is special character in name</div>';
+        return;
+      }
+      if (!hasSpecial) {
+        message.innerHTML = '<div class="alert alert-danger text-center">Registration failed: password must contain ! or ?</div>';
+        return;
+      }
+
+      user.password = "*".repeat(user.password.length);
+
+      document.getElementById("thanks-message").textContent =
+        "Thank you for registering " + user.firstName + " " + user.lastName + "!";
+      document.getElementById("info").innerHTML =
+        "First Name: " + user.firstName + "<br>" +
+        "Last Name: " + user.lastName + "<br>" +
+        "Email: " + user.email + "<br>" +
+        "Password: " + user.password + "<br>" +
+        "Date of Birth: " + user.dob;
+
+      document.getElementById("registration-page").style.display = "none";
+      document.getElementById("thanks-page").style.display = "block";
+    });
+  </script>
+</body>
+</html>
